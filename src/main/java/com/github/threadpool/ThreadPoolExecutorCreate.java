@@ -35,13 +35,27 @@ public class ThreadPoolExecutorCreate {
 
         System.out.println(Runtime.getRuntime().availableProcessors());
 
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(2,4,1000,
-                TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(2),new MyThreadFactory("zhang"),
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(2,5,1000,
+                TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(),new MyThreadFactory("zhang"),
                 new ThreadPoolExecutor.AbortPolicy());
 
         for(int i=0;i<10;i++){
-
+            executor.execute(() -> {
+                System.out.println(Thread.currentThread().getName()+"开始执行");
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName()+"执行结束");
+            });
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        executor.shutdown();
 
     }
 
